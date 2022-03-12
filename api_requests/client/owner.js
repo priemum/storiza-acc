@@ -1,0 +1,22 @@
+const fs = require('fs')
+module.exports = {
+	path: '/api/v1/client/owner',
+	method: 'patch',
+	run: async (req , res , db) => {
+let { headers, query, body } = req
+let data_cookie = headers.data_cookie || ""
+  let data = data_cookie.split(',')
+if(headers.authorization) data = ['1', '1']
+
+if(!data) return res.status(403).json({errors: ["authorization"], message: "Failed Authorization"})
+var account = await db.findOne({token: data[0], priavte_key: data[1]}) || await db.findOne({"client.connect_key": headers.authorization})
+if(!account) return res.status(403).json({errors: ["authorization"], message: "Failed Authorization"})
+
+
+await db.updateOne({_id: account._id} , { "data.ownerID" : body.id || "123" })
+
+
+
+res.status(200).json({errors: [], message: "success"})
+    }
+}

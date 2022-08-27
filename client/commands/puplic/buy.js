@@ -8,7 +8,7 @@ module.exports = {
 async function add_reactions_and_await(reactions, msg, author, innn){
   return await new Promise(async (res , rej) =>{
 
-for(const d of reactions){
+for(const d of reactions){          
 await msg.addReaction(d)
 }
 client.on('messageReactionAdd', async (message, emoji, member) =>{
